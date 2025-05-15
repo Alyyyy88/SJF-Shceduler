@@ -1,0 +1,65 @@
+
+
+
+
+
+
+
+   const [processes, setProcesses] = useState([]);
+  const [arrivalTime, setArrivalTime] = useState("");
+  const [burstTime, setBurstTime] = useState("");
+  const [results, setResults] = useState([]);
+
+   
+
+  const addProcess = () => {
+    if (arrivalTime === "" || burstTime === "") return;
+    if (isNaN(arrivalTime) || isNaN(burstTime)) return;
+    if (+arrivalTime < 0 || +burstTime <= 0) return;
+
+    const newProcess = {
+      id: processes.length + 1,
+      arrivalTime: parseInt(arrivalTime),
+      burstTime: parseInt(burstTime),
+    };
+    setProcesses([...processes, newProcess]);
+    setArrivalTime("");
+    setBurstTime("");
+  };
+
+  const calculateFCFS = () => {
+    let currentTime = 0;
+    const sorted = [...processes].sort((a, b) => a.arrivalTime - b.arrivalTime);
+    const result = [];
+
+    for (let i = 0; i < sorted.length; i++) {
+      const process = sorted[i];
+
+      const startTime = Math.max(currentTime, process.arrivalTime);
+      const completionTime = startTime + process.burstTime;
+      const turnaroundTime = completionTime - process.arrivalTime;
+      const waitingTime = startTime - process.arrivalTime;
+      const responseTime = waitingTime;
+
+      currentTime = completionTime;
+
+      result.push({
+        id: process.id,
+        arrivalTime: process.arrivalTime,
+        burstTime: process.burstTime,
+        startTime,
+        completionTime,
+        turnaroundTime,
+        waitingTime,
+        responseTime,
+      });
+    }
+
+    setResults(result);
+  };
+
+  const avg = (key) => {
+    if (results.length === 0) return 0;
+    const total = results.reduce((sum, p) => sum + p[key], 0);
+    return (total / results.length).toFixed(2);
+  };
