@@ -378,14 +378,7 @@ function App() {
         )}
       </div>
 
-      <footer>
-        <div className="text-center mt-8">
-          <p className="text-sm text-gray-600">
-            Developed by AlyTaha , Sharf Taher 💝
-          </p>
-          <p className="text-sm text-gray-600">2025</p>
-        </div>
-      </footer>
+
     </div>
   );
 }
